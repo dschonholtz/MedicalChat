@@ -45,11 +45,10 @@ This also is an excuse to re-learn or learn for the first time the following:
 
 ## Important files:
 
-- `src/main/java/org.doug/db/PaperDAO.java` - This is the data access object for papers. It is the interface to the database. All search logic is in here.
-- `src/main/java/org.doug/cli/FetchPapersCLI.java` - This is the command line interface to fetch papers. It stores all of the medRxiv papers to a local json file. This allows us to separate network requests from db management.
-- `src/main/java/org.doug/cli/LoadPapersFromJsonCLI.java` - This is the command line interface to load papers into the database from the previously loaded json file.
-- `src/main/java/org.doug/cli/SearchPapersCLI.java` - This allows you to play with search without a webserver. Just a DB.
-
+- [`src/main/java/org.doug/db/PaperDAO.java`](src/main/java/org/doug/db/PaperDAO.java) - This is the data access object for papers. It is the interface to the database. All search logic is in here.
+- [`src/main/java/org.doug/cli/FetchPapersCLI.java`](src/main/java/org/doug/cli/FetchPapersCLI.java) - This is the command line interface to fetch papers. It stores all of the medRxiv papers to a local json file. This allows us to separate network requests from db management.
+- [`src/main/java/org.doug/cli/LoadPapersFromJsonCLI.java`](src/main/java/org/doug/cli/LoadPapersFromJsonCLI.java) - This is the command line interface to load papers into the database from the previously loaded json file.
+- [`src/main/java/org.doug/cli/SearchPapersCLI.java`](src/main/java/org/doug/cli/SearchPapersCLI.java) - This allows you to play with search without a webserver. Just a DB.
 
 
 How to start the true application
