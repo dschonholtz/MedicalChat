@@ -29,4 +29,17 @@ public class trueConfiguration extends Configuration {
     public void setDataSourceFactory(DataSourceFactory database) {
         this.database = database;
     }
+
+    @NotNull
+    private String embeddingModelUrl = "djl://ai.djl.huggingface.pytorch/sentence-transformers/all-MiniLM-L6-v2";
+
+    @JsonProperty("embeddingModelUrl")
+    public String getEmbeddingModelUrl() {
+        return embeddingModelUrl;
+    }
+
+    @JsonProperty("embeddingModelUrl")
+    public void setEmbeddingModelUrl(String embeddingModelUrl) {
+        this.embeddingModelUrl = embeddingModelUrl;
+    }
 }

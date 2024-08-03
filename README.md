@@ -40,7 +40,7 @@ This also is an excuse to re-learn or learn for the first time the following:
 - [X] Postgres
 - [X] Loaded data into db
 - [X] Searching over data given query
-    - [ ] Cosine similarity works with pgvector, but hybrid lex search does not
+    - [X] Cosine similarity + postgres text search. I still don't understand how text search works in postgres super well yet, but it's working
 - [ ] Chatting with data
 
 ## Important files:

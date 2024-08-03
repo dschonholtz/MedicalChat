@@ -8,3 +8,10 @@ database:
   user: yourusername
   password: mysecretpassword
   url: jdbc:postgresql://localhost:5432/vectordb
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+  adminConnectors:
+    - type: http
+      port: 8081
