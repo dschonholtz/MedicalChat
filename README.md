@@ -4,6 +4,10 @@
 THIS IS NOT MEDICAL ADVICE. IT SIMPLY ALLOWS YOU TO CHAT WITH RESEARCH PAPERS. 
 Many of these papers have not been peer reviewed.
 
+In hindsight, this probably shouldn't be called medical chat, as I probably will use it on agentic LLM research more than medical research.
+
+But that is the beauty, you can use it for whatever you want.
+
 # Getting Started
 
 ## Pull down papers
@@ -26,8 +30,6 @@ A comprehensive tool suite to pull down current medical research papers, store t
 
 Then we'll use LLMs to chat with that searchable index.
 
-An architecture diagram of the desired deployed arch will look like the below:
-![Chat with Papers](ChatWPapers.png "Chat with Papers")
 
 This also is an excuse to re-learn or learn for the first time the following:
 
@@ -36,13 +38,17 @@ This also is an excuse to re-learn or learn for the first time the following:
 - [X] Maven
 - [X] Pgvector
 - [X] Postgres
-- [ ] Loaded data into db
-- [ ] Searching over data given query
+- [X] Loaded data into db
+- [X] Searching over data given query
+    - [ ] Cosine similarity works with pgvector, but hybrid lex search does not
 - [ ] Chatting with data
 
-## Current Status
+## Important files:
 
-- [x] Pull down papers
+- `src/main/java/org.doug/db/PaperDAO.java` - This is the data access object for papers. It is the interface to the database. All search logic is in here.
+- `src/main/java/org.doug/cli/FetchPapersCLI.java` - This is the command line interface to fetch papers. It stores all of the medRxiv papers to a local json file. This allows us to separate network requests from db management.
+- `src/main/java/org.doug/cli/LoadPapersFromJsonCLI.java` - This is the command line interface to load papers into the database from the previously loaded json file.
+- `src/main/java/org.doug/cli/SearchPapersCLI.java` - This allows you to play with search without a webserver. Just a DB.
 
 
 
