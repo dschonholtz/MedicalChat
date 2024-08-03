@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Search } from 'lucide-react';
-import { PaperItem } from './Paper'; // Make sure this path is correct
+import PaperItem from './Paper';
 
 const SearchUI = () => {
     const [query, setQuery] = useState('');
@@ -14,9 +14,7 @@ const SearchUI = () => {
         setError(null);
         try {
             const response = await fetch(`/papers/search?query=${encodeURIComponent(query)}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch papers');
-            }
+            if (!response.ok) throw new Error('Failed to fetch papers');
             const data = await response.json();
             setPapers(data);
         } catch (error) {
@@ -28,30 +26,30 @@ const SearchUI = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-4">Medical Research Assistant</h1>
-            <form onSubmit={handleSearch} className="mb-6">
-                <div className="flex items-center border-2 rounded-lg">
+        <div className="max-w-4xl mx-auto p-6 space-y-8">
+            <h1 className="text-4xl font-bold text-gray-800 text-center mb-8">Medical Research Assistant</h1>
+            <form onSubmit={handleSearch} className="mb-8">
+                <div className="flex items-center border-2 border-gray-300 rounded-full overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all duration-200">
                     <input
                         type="text"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="Ask a medical research question..."
-                        className="flex-grow p-2 outline-none"
+                        className="flex-grow p-4 outline-none text-gray-700"
                     />
-                    <button type="submit" className="bg-blue-500 text-white p-2 rounded-r-lg hover:bg-blue-600 transition-colors" disabled={isLoading}>
+                    <button type="submit" className="bg-blue-500 text-white p-4 hover:bg-blue-600 transition-colors duration-200" disabled={isLoading}>
                         <Search size={24} />
                     </button>
                 </div>
             </form>
 
-            {isLoading && <p>Loading...</p>}
-            {error && <p className="text-red-500">{error}</p>}
+            {isLoading && <p className="text-center text-gray-600">Loading...</p>}
+            {error && <p className="text-center text-red-500">{error}</p>}
 
             {papers.length > 0 && (
-                <div className="mb-6">
-                    <h2 className="text-xl font-semibold mb-2">Relevant Papers:</h2>
-                    <ul className="space-y-4">
+                <div>
+                    <h2 className="text-2xl font-semibold mb-4 text-gray-800">Relevant Papers:</h2>
+                    <ul className="space-y-6">
                         {papers.map(paper => (
                             <li key={paper.doi || paper.id}>
                                 <PaperItem paper={paper} />
@@ -63,5 +61,6 @@ const SearchUI = () => {
         </div>
     );
 };
+
 
 export default SearchUI;
