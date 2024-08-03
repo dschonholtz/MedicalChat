@@ -31,79 +31,41 @@ public interface PaperDAO {
             "title_tsv = to_tsvector('english', title) WHERE id = :paperId")
     void updateTSVectors(@Bind("paperId") long paperId);
 
-
-    @SqlQuery("SELECT * FROM (" +
+    @SqlQuery("WITH vector_search AS (" +
             "    SELECT " +
-            "        p.id, " +
-            "        p.doi, " +
-            "        p.title, " +
-            "        p.authors, " +
-            "        p.category, " +
-            "        p.abstract, " +
-            "        p.author_corresponding, " +
-            "        p.author_corresponding_institution, " +
-            "        p.date, " +
-            "        p.version, " +
-            "        p.type, " +
-            "        p.license, " +
-            "        p.jatsxml, " +
-            "        p.published, " +
-            "        p.server, " +
-            "        p.title_tsv, " +
-            "        p.abstract_tsv, " +
+            "        p.*," +
             "        1 - (pv.title_vector <=> CAST(:queryVector AS vector)) AS title_similarity, " +
             "        1 - (pv.abstract_segment_vector <=> CAST(:queryVector AS vector)) AS abstract_similarity " +
-            "    FROM " +
-            "        papers p " +
-            "    JOIN " +
-            "        paper_vectors pv ON p.id = pv.paper_id " +
-            ") subquery " +
-            "WHERE " +
-            "   title_similarity * .5 + abstract_similarity > .6 " +
+            "    FROM" +
+            "        papers p" +
+            "    JOIN" +
+            "        paper_vectors pv ON p.id = pv.paper_id" +
+            "    WHERE" +
+            "        1 - (pv.title_vector <=> CAST(:queryVector AS vector)) * 0.5 + " +
+            "        1 - (pv.abstract_segment_vector <=> CAST(:queryVector AS vector)) > 0.6 " +
+            ")," +
+            "keyword_matches AS (" +
+            "    SELECT" +
+            "        vs.*," +
+            "        ts_rank_cd(vs.title_tsv, query) AS title_rank," +
+            "        ts_rank_cd(vs.abstract_tsv, query) AS abstract_rank," +
+            "        ts_rank_cd(vs.title_tsv || vs.abstract_tsv, query) AS combined_rank" +
+            "    FROM" +
+            "        vector_search vs," +
+            "        plainto_tsquery(:textQuery) query" +
+            ")" +
+            "SELECT" +
+            "    *, " +
+            "    (title_similarity * :titleVectorWeight + " +
+            "     abstract_similarity * :abstractVectorWeight + " +
+            "     title_rank * :titleRankWeight + " +
+            "     abstract_rank * :abstractRankWeight + " +
+            "     combined_rank * :keywordCountWeight) AS combined_score " +
+            "FROM " +
+            "    keyword_matches " +
             "ORDER BY " +
-            "    title_similarity * .5 + abstract_similarity DESC " +
-            "LIMIT 10"
-//                            +
-//                    "), " +
-//                    "keyword_matches AS ( " +
-//                    "    SELECT " +
-//                    "        id, " +
-//                    "        title, " +
-//                    "        abstract, " +
-//                    "        title_tsv, " +
-//                    "        abstract_tsv, " +
-//                    "        title_similarity, " +
-//                    "        abstract_similarity, " +
-//                    "        ts_rank_cd(title_tsv, query) AS title_rank, " +
-//                    "        ts_rank_cd(abstract_tsv, query) AS abstract_rank, " +
-//                    "        count(*) FILTER (WHERE word = ANY(tsvector_to_array(title_tsv || abstract_tsv))) AS keyword_count " +
-//                    "    FROM " +
-//                    "        vector_search, " +
-//                    "        plainto_tsquery(:textQuery) query, " +
-//                    "        unnest(tsvector_to_array(query::tsvector)) word " +
-//                    "    GROUP BY " +
-//                    "        id, title, abstract, title_tsv, abstract_tsv, title_similarity, abstract_similarity, query " +
-//                    ") " +
-//                    "SELECT " +
-//                    "    id, " +
-//                    "    title, " +
-//                    "    abstract, " +
-//                    "    title_similarity, " +
-//                    "    abstract_similarity, " +
-//                    "    title_rank, " +
-//                    "    abstract_rank, " +
-//                    "    keyword_count, " +
-//                    "    (title_similarity * :titleVectorWeight + " +
-//                    "     abstract_similarity * :abstractVectorWeight + " +
-//                    "     title_rank * :titleRankWeight + " +
-//                    "     abstract_rank * :abstractRankWeight + " +
-//                    "     (CASE WHEN keyword_count > 0 THEN ln(keyword_count + 1) * :keywordCountWeight ELSE 0 END)) AS combined_score " +
-//                    "FROM " +
-//                    "    keyword_matches " +
-//                    "ORDER BY " +
-//                    "    combined_score DESC " +
-//                    "LIMIT :limit"
-    )
+            "    combined_score DESC " +
+            "LIMIT :limit")
     List<Paper> hybridSearch(
             @Bind("queryVector") float[] queryVector,
             @Bind("textQuery") String textQuery,
