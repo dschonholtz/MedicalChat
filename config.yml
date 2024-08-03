@@ -3,3 +3,8 @@ logging:
   level: INFO
   loggers:
     org.doug: DEBUG
+database:
+  driverClass: org.postgresql.Driver
+  user: yourusername
+  password: mysecretpassword
+  url: jdbc:postgresql://localhost:5432/vectordb

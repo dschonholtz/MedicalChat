@@ -2,6 +2,7 @@ package org.doug.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.sql.Date;
 
 public class Paper {
     @JsonProperty
@@ -19,7 +20,7 @@ public class Paper {
     @JsonProperty("author_corresponding_institution")
     private String authorCorrespondingInstitution;
     @JsonProperty
-    private String date;
+    private Date date;
     @JsonProperty
     private String version;
     @JsonProperty
@@ -33,7 +34,36 @@ public class Paper {
     @JsonProperty
     private String server;
 
-    public Paper() {
+    public Paper(
+            String doi,
+            String title,
+            String authors,
+            String category,
+            String abstractText,
+            String authorCorresponding,
+            String authorCorrespondingInstitution,
+            Date date,
+            String version,
+            String type,
+            String license,
+            String jatsxml,
+            String published,
+            String server
+    ) {
+        this.doi = doi;
+        this.title = title;
+        this.authors = authors;
+        this.category = category;
+        this.abstractText = abstractText;
+        this.authorCorresponding = authorCorresponding;
+        this.authorCorrespondingInstitution = authorCorrespondingInstitution;
+        this.date = date;
+        this.version = version;
+        this.type = type;
+        this.license = license;
+        this.jatsxml = jatsxml;
+        this.published = published;
+        this.server = server;
     }
 
     // Getters and setters
@@ -97,11 +127,11 @@ public class Paper {
         this.authorCorrespondingInstitution = authorCorrespondingInstitution;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

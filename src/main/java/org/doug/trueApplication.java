@@ -25,6 +25,7 @@ public class trueApplication extends Application<trueConfiguration> {
     public void run(trueConfiguration configuration, Environment environment) {
         final MedRxivDataService medRxivDataService = configuration.getMedRxivDataService();
         environment.lifecycle().manage(medRxivDataService);
+
     }
 
 }
