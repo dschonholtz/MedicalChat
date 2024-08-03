@@ -5,7 +5,7 @@ logging:
     org.doug: DEBUG
 database:
   driverClass: org.postgresql.Driver
-  user: yourusername
+  user: postgres
   password: mysecretpassword
   url: jdbc:postgresql://localhost:5432/vectordb
 server:

@@ -5,6 +5,7 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import org.doug.core.EmbeddingCalculator;
 import org.doug.db.PaperDAO;
+import org.doug.db.PaperMapper;
 import org.doug.resources.MedRxivDataService;
 import org.doug.resources.PaperResource;
 import org.doug.resources.PaperService;
@@ -37,6 +38,8 @@ public class trueApplication extends Application<trueConfiguration> {
                 configuration.getDataSourceFactory().getUser(),
                 configuration.getDataSourceFactory().getPassword());
         jdbi.installPlugin(new SqlObjectPlugin());
+
+        jdbi.registerRowMapper(new PaperMapper());
 
         // Create DAOs
         final PaperDAO paperDAO = jdbi.onDemand(PaperDAO.class);
